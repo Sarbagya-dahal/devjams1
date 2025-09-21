@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/hooks/use-toast';
-import { Moon, Sun, Eye, EyeOff, TrendingUp, Zap, Building2, ChartColumnIncreasing, Lock, Calculator, ArrowUp, ArrowDown, Shield, ArrowRight, BadgeCheck, DollarSign } from 'lucide-react';
+import { Moon, Sun, Eye, EyeOff, TrendingUp, Zap, Building2, ChartColumnIncreasing, Lock, ArrowUp, ArrowDown, Shield, ArrowRight, BadgeCheck, DollarSign } from 'lucide-react';
 
 interface LoginProps {
   toggleTheme: () => void;
@@ -67,19 +67,19 @@ const Login = ({ toggleTheme, isDarkMode }: LoginProps) => {
     window.addEventListener('resize', resizeCanvas);
     
     // Financial data points for animation - fewer points to reduce overlap
-    const dataPoints = Array.from({ length: 25 }, () => ({
+    const dataPoints = Array.from({ length: 15 }, () => ({
       x: Math.random() * canvas.width,
       y: Math.random() * canvas.height,
       value: (Math.random() * 10000).toFixed(2),
       size: Math.random() * 3 + 1,
-      speed: Math.random() * 2 + 0.5,
+      speed: Math.random() * 0.8 + 0.2, // Slower speed
       isPositive: Math.random() > 0.5,
       opacity: Math.random() * 0.5 + 0.3
     }));
     
     // Animated line chart data
-    const lineData = Array.from({ length: 50 }, (_, i) => ({
-      x: (i / 49) * canvas.width,
+    const lineData = Array.from({ length: 40 }, (_, i) => ({
+      x: (i / 39) * canvas.width,
       y: canvas.height / 2 + Math.sin(i / 5) * 50
     }));
     
@@ -90,7 +90,7 @@ const Login = ({ toggleTheme, isDarkMode }: LoginProps) => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
       // Draw grid with a more subtle appearance
-      ctx.strokeStyle = isDarkMode ? 'rgba(100, 100, 150, 0.08)' : 'rgba(200, 200, 230, 0.2)';
+      ctx.strokeStyle = isDarkMode ? 'rgba(100, 100, 150, 0.08)' : 'rgba(200, 200, 230, 0.15)';
       ctx.lineWidth = 1;
       
       const gridSize = 50;
@@ -117,8 +117,8 @@ const Login = ({ toggleTheme, isDarkMode }: LoginProps) => {
         ctx.moveTo(lineData[i].x, lineData[i].y);
         ctx.lineTo(lineData[i + 1].x, lineData[i + 1].y);
         
-        // Move points for animation
-        lineData[i].y += Math.sin(Date.now() / 1000 + i) * 0.3;
+        // Move points for animation - slower
+        lineData[i].y += Math.sin(Date.now() / 1500 + i) * 0.2;
       }
       ctx.stroke();
       
@@ -234,7 +234,7 @@ const Login = ({ toggleTheme, isDarkMode }: LoginProps) => {
   if (isLoadingScreen) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-black">
-        <div className="relative w-72 h-56 mb-12">
+        <div className="relative w-72 h-48 mb-8">
           {/* Stock chart animation */}
           <div className="absolute inset-0 bg-gray-800 rounded-lg p-4 border border-gray-700">
             <div className="h-full w-full relative">
@@ -276,7 +276,7 @@ const Login = ({ toggleTheme, isDarkMode }: LoginProps) => {
           {/* Logo */}
           <div className="absolute -bottom-6 left-1/2 transform -translate-x-1/2 flex items-center space-x-2 bg-gray-900 py-3 px-5 rounded-lg shadow-lg border border-gray-700">
             <div className="p-2 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700">
-              <TrendingUp className="h-7 w-7 text-white" />
+              <TrendingUp className="h-6 w-6 text-white" />
             </div>
             <h1 className="text-xl font-bold text-white">
               <span className="text-blue-400">Fin</span>Analyst
@@ -284,32 +284,15 @@ const Login = ({ toggleTheme, isDarkMode }: LoginProps) => {
           </div>
         </div>
         
-        {/* Progress bar - larger size */}
-        <div className="w-96 bg-gray-800 rounded-full h-3 mb-6 border border-gray-700">
+        {/* Progress bar */}
+        <div className="w-80 bg-gray-800 rounded-full h-2 mb-4 border border-gray-700">
           <div 
-            className="bg-gradient-to-r from-green-500 to-green-600 h-3 rounded-full transition-all duration-100 ease-linear relative overflow-hidden"
+            className="bg-gradient-to-r from-green-500 to-green-600 h-2 rounded-full transition-all duration-100 ease-linear"
             style={{ width: `${progress}%` }}
-          >
-            {/* Dollar signs in progress bar */}
-            {Array.from({ length: 8 }).map((_, i) => (
-              <div
-                key={i}
-                className="absolute text-white opacity-80"
-                style={{
-                  left: `${i * 12}%`,
-                  top: '50%',
-                  transform: 'translateY(-50%)',
-                  animation: `moveDollars 1.5s linear infinite`,
-                  animationDelay: `${i * 0.2}s`
-                }}
-              >
-                <DollarSign size={14} />
-              </div>
-            ))}
-          </div>
+          />
         </div>
         
-        <p className="text-gray-400 text-lg">Loading financial intelligence...</p>
+        <p className="text-gray-400 text-sm">Loading financial intelligence...</p>
         
         <style>{`
           @keyframes drawLine {
@@ -323,16 +306,6 @@ const Login = ({ toggleTheme, isDarkMode }: LoginProps) => {
           }
           .animate-drawLine {
             animation: drawLine 2s ease-in-out forwards;
-          }
-          @keyframes moveDollars {
-            0% {
-              transform: translateX(0) translateY(-50%);
-              opacity: 0.8;
-            }
-            100% {
-              transform: translateX(300px) translateY(-50%);
-              opacity: 0;
-            }
           }
         `}</style>
       </div>
@@ -356,7 +329,7 @@ const Login = ({ toggleTheme, isDarkMode }: LoginProps) => {
       
       {/* Moving financial indicators - reduced number and positioned to avoid content */}
       <div className="absolute inset-0 overflow-hidden">
-        {Array.from({ length: 5 }).map((_, i) => (
+        {Array.from({ length: 4 }).map((_, i) => (
           <div
             key={i}
             className="absolute text-xs font-mono font-bold text-blue-600 dark:text-blue-400 opacity-70 animate-float"
@@ -384,87 +357,90 @@ const Login = ({ toggleTheme, isDarkMode }: LoginProps) => {
       </div>
 
       {/* Theme toggle button */}
-      <div className="absolute top-6 right-6 z-20">
+      <div className="absolute top-4 right-4 z-20">
         <Button 
           variant="outline" 
           size="icon" 
           onClick={toggleTheme}
           aria-label="Toggle theme"
-          className="rounded-full h-12 w-12 backdrop-blur-sm bg-white/90 dark:bg-gray-800/90 shadow-md hover:scale-105 transition-transform border border-gray-300 dark:border-gray-600"
+          className="rounded-full h-10 w-10 backdrop-blur-sm bg-white/90 dark:bg-gray-800/90 shadow-md hover:scale-105 transition-transform border border-gray-300 dark:border-gray-600"
         >
-          {isDarkMode ? <Sun className="h-6 w-6 text-blue-600" /> : <Moon className="h-6 w-6 text-blue-600" />}
+          {isDarkMode ? <Sun className="h-5 w-5 text-blue-600" /> : <Moon className="h-5 w-5 text-blue-600" />}
         </Button>
       </div>
 
-      {/* Header section */}
-      <div className="absolute top-8 left-8 z-20">
-        <div className="flex items-center space-x-3">
-          <div className="p-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 shadow-lg">
-            <TrendingUp className="h-8 w-8 text-white" />
-          </div>
-          <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
-            <span className="text-blue-600">Fin</span>Analyst
-          </h1>
-        </div>
-      </div>
-
-      {/* Main content - split screen layout */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-8 items-center justify-center p-6 md:p-10 z-10">
+      {/* Main content - compact layout */}
+      <div className="flex-1 flex flex-col lg:flex-row items-center justify-center p-4 md:p-6 z-10 gap-6">
         {/* Left side - promotional content */}
-        <div className="hidden lg:flex flex-col justify-center space-y-8 p-8 text-left">
-          <div className="space-y-6 backdrop-blur-sm bg-white/80 dark:bg-gray-800/80 p-6 rounded-xl shadow-lg z-20">
-            <h2 className="text-4xl font-bold text-gray-800 dark:text-white">
-              AI-Powered Financial <span className="text-blue-600">Intelligence</span>
-            </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-md">
-              Real-time analytics, predictive insights, and intelligent reporting for modern financial professionals.
-            </p>
-            
-            <div className="mt-6 bg-gradient-to-r from-blue-100 to-blue-200 dark:from-blue-900/40 dark:to-blue-800/40 p-4 rounded-lg w-32">
-              <div className="text-2xl font-bold text-blue-700 dark:text-blue-300">
-                99%
+        <div className="w-full lg:w-2/5 max-w-md flex flex-col space-y-6">
+          <div className="flex items-center space-x-3 mb-2">
+            <div className="p-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 shadow-lg">
+              <TrendingUp className="h-8 w-8 text-white" />
+            </div>
+            <h1 className="text-2xl font-bold text-gray-800 dark:text-white">
+              <span className="text-blue-600">Fin</span>Analyst
+            </h1>
+          </div>
+          
+          <p className="text-lg text-gray-600 dark:text-gray-300 mb-4">
+            Convert trial balances into clarity — beautiful reports, instant insights.
+          </p>
+          
+          <div className="space-y-4">
+            <div className="flex items-start space-x-3 p-3 rounded-xl bg-white/80 dark:bg-gray-800/80 shadow-sm border border-blue-100 dark:border-blue-800/30">
+              <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/40">
+                <ChartColumnIncreasing className="h-5 w-5 text-blue-600 dark:text-blue-400" />
               </div>
-              <div className="text-sm text-blue-600 dark:text-blue-200 mt-1">Accuracy</div>
+              <div>
+                <h3 className="font-semibold text-gray-800 dark:text-white">Real-time insights</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Live visuals and KPIs</p>
+              </div>
+            </div>
+            
+            <div className="flex items-start space-x-3 p-3 rounded-xl bg-white/80 dark:bg-gray-800/80 shadow-sm border border-blue-100 dark:border-blue-800/30">
+              <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/40">
+                <Lock className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-800 dark:text-white">Enterprise security</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Bank-level encryption</p>
+              </div>
+            </div>
+            
+            <div className="flex items-start space-x-3 p-3 rounded-xl bg-white/80 dark:bg-gray-800/80 shadow-sm border border-blue-100 dark:border-blue-800/30">
+              <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/40">
+                <Zap className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-800 dark:text-white">Fast & optimized</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">Minimal setup, instant results</p>
+              </div>
+            </div>
+            
+            <div className="flex items-start space-x-3 p-3 rounded-xl bg-white/80 dark:bg-gray-800/80 shadow-sm border border-blue-100 dark:border-blue-800/30">
+              <div className="p-2 rounded-lg bg-blue-100 dark:bg-blue-900/40">
+                <Building2 className="h-5 w-5 text-blue-600 dark:text-blue-400" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-800 dark:text-white">Integrations</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400">CSV, PDF, API-ready</p>
+              </div>
             </div>
           </div>
           
-          <div className="grid grid-cols-1 gap-6 mt-6 z-20">
-            <div className="flex items-start space-x-4 p-4 rounded-xl backdrop-blur-sm bg-white/80 dark:bg-gray-800/80 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:bg-white/90 dark:hover:bg-gray-800/90 cursor-pointer border border-blue-100 dark:border-blue-800/30">
-              <div className="p-3 rounded-lg bg-blue-100 dark:bg-blue-900/40">
-                <ChartColumnIncreasing className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-800 dark:text-white">Real-time Analytics</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Live market data and trends</p>
-              </div>
-            </div>
-            
-            <div className="flex items-start space-x-4 p-4 rounded-xl backdrop-blur-sm bg-white/80 dark:bg-gray-800/80 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:bg-white/90 dark:hover:bg-gray-800/90 cursor-pointer border border-blue-100 dark:border-blue-800/30">
-              <div className="p-3 rounded-lg bg-blue-100 dark:bg-blue-900/40">
-                <Lock className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-800 dark:text-white">Bank-Level Security</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Enterprise-grade security protocols</p>
-              </div>
-            </div>
-            
-            <div className="flex items-start space-x-4 p-4 rounded-xl backdrop-blur-sm bg-white/80 dark:bg-gray-800/80 shadow-lg transition-all duration-300 hover:scale-105 hover:shadow-xl hover:bg-white/90 dark:hover:bg-gray-800/90 cursor-pointer border border-blue-100 dark:border-blue-800/30">
-              <div className="p-3 rounded-lg bg-blue-100 dark:bg-blue-900/40">
-                <Building2 className="h-6 w-6 text-blue-600 dark:text-blue-400" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-gray-800 dark:text-white">Business Intelligence</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">Comprehensive financial reporting</p>
-              </div>
+          <div className="flex items-center mt-4">
+            <div className="text-2xl font-bold text-gray-800 dark:text-white mr-3">99%</div>
+            <div>
+              <div className="text-sm font-semibold text-gray-700 dark:text-gray-300">Accuracy</div>
+              <div className="text-xs text-gray-500 dark:text-gray-400">Trusted by finance teams</div>
             </div>
           </div>
         </div>
 
         {/* Right side - login card */}
-        <div className="flex items-center justify-center z-20">
+        <div className="w-full lg:w-2/5 max-w-md z-20">
           <Card 
-            className="w-full max-w-md shadow-xl bg-gradient-to-b from-white to-gray-100 dark:from-gray-700 dark:to-gray-800 backdrop-blur-md border border-gray-300 dark:border-gray-600 overflow-hidden transition-all duration-1000 ease-out"
+            className="w-full shadow-xl bg-gradient-to-b from-white to-gray-100 dark:from-gray-700 dark:to-gray-800 backdrop-blur-md border border-gray-300 dark:border-gray-600 overflow-hidden transition-all duration-1000 ease-out"
             style={{ 
               transform: isVisible ? 'translateY(0) scale(1)' : 'translateY(20px) scale(0.95)',
               opacity: isVisible ? 1 : 0
@@ -473,16 +449,16 @@ const Login = ({ toggleTheme, isDarkMode }: LoginProps) => {
             {/* Accent bar */}
             <div className="h-1 bg-gradient-to-r from-blue-500 to-blue-700"></div>
             
-            <CardHeader className="space-y-1 pb-4 pt-8">
+            <CardHeader className="space-y-1 pb-3 pt-6">
               <div className="flex justify-center items-center mb-2">
-                <div className="p-3 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 shadow-md mr-3">
-                  <TrendingUp className="h-8 w-8 text-white" />
+                <div className="p-2 rounded-xl bg-gradient-to-r from-blue-600 to-blue-700 shadow-md mr-2">
+                  <TrendingUp className="h-6 w-6 text-white" />
                 </div>
-                <h2 className="text-2xl font-bold text-gray-800 dark:text-white">
+                <h2 className="text-xl font-bold text-gray-800 dark:text-white">
                   <span className="text-blue-600">Fin</span>Analyst
                 </h2>
               </div>
-              <CardTitle className="text-xl text-center font-bold text-gray-800 dark:text-white">
+              <CardTitle className="text-lg text-center font-bold text-gray-800 dark:text-white">
                 Secure Login
               </CardTitle>
               <CardDescription className="text-center text-gray-600 dark:text-gray-300">
@@ -490,10 +466,10 @@ const Login = ({ toggleTheme, isDarkMode }: LoginProps) => {
               </CardDescription>
             </CardHeader>
             
-            <CardContent className="grid gap-5 pb-6">
+            <CardContent className="grid gap-4 pb-4">
               <form onSubmit={handleLogin}>
-                <div className="grid gap-5">
-                  <div className="grid gap-2">
+                <div className="grid gap-4">
+                  <div className="grid gap-1.5">
                     <label htmlFor="username" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       Username
                     </label>
@@ -506,7 +482,7 @@ const Login = ({ toggleTheme, isDarkMode }: LoginProps) => {
                         onChange={(e) => setUsername(e.target.value)}
                         required
                         autoComplete="off"
-                        className="py-5 pl-10 pr-4 rounded-lg transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600/50 dark:text-white"
+                        className="py-4 pl-10 pr-4 rounded-lg transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600/50 dark:text-white"
                       />
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
@@ -516,7 +492,7 @@ const Login = ({ toggleTheme, isDarkMode }: LoginProps) => {
                     </div>
                   </div>
                   
-                  <div className="grid gap-2">
+                  <div className="grid gap-1.5">
                     <label htmlFor="password" className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       Password
                     </label>
@@ -528,7 +504,7 @@ const Login = ({ toggleTheme, isDarkMode }: LoginProps) => {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
-                        className="py-5 pl-10 pr-12 rounded-lg transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600/50 dark:text-white"
+                        className="py-4 pl-10 pr-12 rounded-lg transition-all duration-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-600/50 dark:text-white"
                       />
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-blue-500" viewBox="0 0 20 20" fill="currentColor">
@@ -551,13 +527,13 @@ const Login = ({ toggleTheme, isDarkMode }: LoginProps) => {
                   </div>
                   
                   <Button 
-                    className="w-full py-5 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:-translate-y-0.5 shadow-md hover:shadow-lg hover:shadow-blue-500/30 text-white font-semibold relative overflow-hidden group"
+                    className="w-full py-4 rounded-lg bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 transition-all duration-300 transform hover:-translate-y-0.5 shadow-md hover:shadow-lg hover:shadow-blue-500/30 text-white font-semibold relative overflow-hidden group"
                     disabled={isLoading}
                     onClick={createRipple}
                   >
                     {isLoading ? (
                       <div className="flex items-center justify-center">
-                        <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </svg>
@@ -565,9 +541,9 @@ const Login = ({ toggleTheme, isDarkMode }: LoginProps) => {
                       </div>
                     ) : (
                       <div className="flex items-center justify-center">
-                        <Lock className="mr-2 h-5 w-5" />
+                        <Lock className="mr-2 h-4 w-4" />
                         Sign In
-                        <ArrowRight className="ml-2 h-5 w-5 transition-transform group-hover:translate-x-1" />
+                        <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
                       </div>
                     )}
                   </Button>
@@ -575,22 +551,22 @@ const Login = ({ toggleTheme, isDarkMode }: LoginProps) => {
               </form>
 
               {/* Security trust signals */}
-              <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
+              <div className="mt-4 pt-3 border-t border-gray-200 dark:border-gray-700">
                 <div className="flex items-center justify-center space-x-4">
                   <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
-                    <Shield className="h-4 w-4 text-green-500 mr-1" />
+                    <Shield className="h-3 w-3 text-green-500 mr-1" />
                     <span>Bank-level encryption</span>
                   </div>
                   <div className="flex items-center text-xs text-gray-500 dark:text-gray-400">
-                    <BadgeCheck className="h-4 w-4 text-blue-500 mr-1" />
+                    <BadgeCheck className="h-3 w-3 text-blue-500 mr-1" />
                     <span>ISO 27001 certified</span>
                   </div>
                 </div>
               </div>
             </CardContent>
             
-            <CardFooter className="flex justify-center py-5 bg-gray-50 dark:bg-gray-700/30">
-              <p className="text-sm text-center text-gray-600 dark:text-gray-300">
+            <CardFooter className="flex justify-center py-3 bg-gray-50 dark:bg-gray-700/30">
+              <p className="text-xs text-center text-gray-600 dark:text-gray-300">
                 Use <span className="font-semibold text-blue-600 dark:text-blue-400">admin</span> / 
                 <span className="font-semibold text-blue-600 dark:text-blue-400">admin</span> to sign in
               </p>
@@ -600,7 +576,7 @@ const Login = ({ toggleTheme, isDarkMode }: LoginProps) => {
       </div>
 
       {/* Footer */}
-      <div className="absolute bottom-4 left-0 right-0 text-center text-xs text-gray-500 dark:text-gray-400 z-20">
+      <div className="absolute bottom-2 left-0 right-0 text-center text-xs text-gray-500 dark:text-gray-400 z-20">
         <p>© {new Date().getFullYear()} FinAnalyst. All rights reserved.</p>
       </div>
 
@@ -612,7 +588,7 @@ const Login = ({ toggleTheme, isDarkMode }: LoginProps) => {
             opacity: 0.7;
           }
           50% {
-            transform: translateY(-10px) rotate(5deg);
+            transform: translateY(-8px) rotate(3deg);
             opacity: 1;
           }
           100% {
@@ -621,7 +597,7 @@ const Login = ({ toggleTheme, isDarkMode }: LoginProps) => {
           }
         }
         .animate-float {
-          animation: float 8s ease-in-out infinite;
+          animation: float 10s ease-in-out infinite;
         }
         .ripple {
           position: absolute;
