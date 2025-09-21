@@ -24,7 +24,8 @@ import {
   Sun, 
   Moon,
   FileUp,
-  FileSearch
+  FileSearch,
+  TrendingUp
 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
@@ -59,22 +60,27 @@ const Layout = ({ toggleTheme, isDarkMode }: LayoutProps) => {
 
   return (
     <SidebarProvider>
-      <div className="min-h-screen flex w-full">
-        <Sidebar className="dark:bg-blue-950 bg-blue-50 border-r border-blue-200 dark:border-blue-800">
-          <SidebarHeader className="flex items-center justify-center py-4">
-            <h2 className="text-xl font-bold text-blue-800 dark:text-blue-100">Financial Analyzer</h2>
+      <div className="min-h-screen flex w-full bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-blue-900 dark:to-purple-900">
+        <Sidebar className="dark:bg-blue-950 bg-blue-100 border-r border-blue-200 dark:border-blue-800">
+          <SidebarHeader className="flex items-center justify-center py-4 bg-blue-600 dark:bg-blue-900">
+            <div className="flex items-center">
+              <div className="p-2 rounded-lg bg-white/20 mr-2">
+                <TrendingUp className="h-6 w-6 text-white" />
+              </div>
+              <h2 className="text-xl font-bold text-white">Financial Analyzer</h2>
+            </div>
           </SidebarHeader>
           
-          <SidebarContent>
+          <SidebarContent className="mt-4">
             <SidebarGroup>
-              <SidebarGroupLabel className="text-blue-700 dark:text-blue-300">Main</SidebarGroupLabel>
+              <SidebarGroupLabel className="text-blue-700 dark:text-blue-300 pl-4">Main</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <Button 
                         variant={location.pathname === '/dashboard' ? "secondary" : "ghost"} 
-                        className="w-full justify-start text-blue-800 dark:text-blue-100 hover:bg-blue-100 dark:hover:bg-blue-900" 
+                        className="w-full justify-start text-blue-800 dark:text-blue-100 hover:bg-blue-200 dark:hover:bg-blue-800/60" 
                         onClick={() => navigate('/dashboard')}
                       >
                         <Upload className="mr-2 h-4 w-4" />
@@ -87,7 +93,7 @@ const Layout = ({ toggleTheme, isDarkMode }: LayoutProps) => {
                     <SidebarMenuButton asChild>
                       <Button 
                         variant={location.pathname === '/reports' ? "secondary" : "ghost"} 
-                        className="w-full justify-start text-blue-800 dark:text-blue-100 hover:bg-blue-100 dark:hover:bg-blue-900" 
+                        className="w-full justify-start text-blue-800 dark:text-blue-100 hover:bg-blue-200 dark:hover:bg-blue-800/60" 
                         onClick={() => navigate('/reports')}
                       >
                         <FileSpreadsheet className="mr-2 h-4 w-4" />
@@ -100,7 +106,7 @@ const Layout = ({ toggleTheme, isDarkMode }: LayoutProps) => {
                     <SidebarMenuButton asChild>
                       <Button 
                         variant={location.pathname === '/view-reports' ? "secondary" : "ghost"} 
-                        className="w-full justify-start text-blue-800 dark:text-blue-100 hover:bg-blue-100 dark:hover:bg-blue-900" 
+                        className="w-full justify-start text-blue-800 dark:text-blue-100 hover:bg-blue-200 dark:hover:bg-blue-800/60" 
                         onClick={() => navigate('/view-reports')}
                       >
                         <BarChart className="mr-2 h-4 w-4" />
@@ -113,7 +119,7 @@ const Layout = ({ toggleTheme, isDarkMode }: LayoutProps) => {
                     <SidebarMenuButton asChild>
                       <Button 
                         variant={location.pathname === '/ratios' ? "secondary" : "ghost"} 
-                        className="w-full justify-start text-blue-800 dark:text-blue-100 hover:bg-blue-100 dark:hover:bg-blue-900" 
+                        className="w-full justify-start text-blue-800 dark:text-blue-100 hover:bg-blue-200 dark:hover:bg-blue-800/60" 
                         onClick={() => navigate('/ratios')}
                       >
                         <PieChart className="mr-2 h-4 w-4" />
@@ -126,14 +132,14 @@ const Layout = ({ toggleTheme, isDarkMode }: LayoutProps) => {
             </SidebarGroup>
 
             <SidebarGroup>
-              <SidebarGroupLabel className="text-blue-700 dark:text-blue-300">Data Tools</SidebarGroupLabel>
+              <SidebarGroupLabel className="text-blue-700 dark:text-blue-300 pl-4">Data Tools</SidebarGroupLabel>
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild>
                       <Button 
                         variant={location.pathname === '/data-cleanup' ? "secondary" : "ghost"} 
-                        className="w-full justify-start text-blue-800 dark:text-blue-100 hover:bg-blue-100 dark:hover:bg-blue-900" 
+                        className="w-full justify-start text-blue-800 dark:text-blue-100 hover:bg-blue-200 dark:hover:bg-blue-800/60" 
                         onClick={() => navigate('/data-cleanup')}
                       >
                         <FileSearch className="mr-2 h-4 w-4" />
@@ -146,7 +152,7 @@ const Layout = ({ toggleTheme, isDarkMode }: LayoutProps) => {
                     <SidebarMenuButton asChild>
                       <Button 
                         variant={location.pathname === '/sample-data' ? "secondary" : "ghost"} 
-                        className="w-full justify-start text-blue-800 dark:text-blue-100 hover:bg-blue-100 dark:hover:bg-blue-900" 
+                        className="w-full justify-start text-blue-800 dark:text-blue-100 hover:bg-blue-200 dark:hover:bg-blue-800/60" 
                         onClick={() => navigate('/sample-data')}
                       >
                         <FileUp className="mr-2 h-4 w-4" />
@@ -159,10 +165,10 @@ const Layout = ({ toggleTheme, isDarkMode }: LayoutProps) => {
             </SidebarGroup>
           </SidebarContent>
           
-          <SidebarFooter className="p-4 space-y-2">
+          <SidebarFooter className="p-4 space-y-2 bg-blue-50 dark:bg-blue-900/30">
             <Button 
               variant="ghost" 
-              className="w-full justify-start text-blue-800 dark:text-blue-100 hover:bg-blue-100 dark:hover:bg-blue-900" 
+              className="w-full justify-start text-blue-800 dark:text-blue-100 hover:bg-blue-200 dark:hover:bg-blue-800/60" 
               onClick={toggleTheme}
             >
               {isDarkMode ? 
